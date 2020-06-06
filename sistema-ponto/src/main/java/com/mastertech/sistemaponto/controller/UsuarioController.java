@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.mastertech.sistemaponto.model.Usuario;
 import com.mastertech.sistemaponto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,12 +26,12 @@ class UsuarioController {
     }
 
     @RequestMapping(value = "/usuario/{id}", method = RequestMethod.GET )
-    public Optional<Usuario> getById(@PathVariable(value = "id") long id){
+    public ResponseEntity<Usuario> getById(@PathVariable(value = "id") long id){
         return usuarioService.getUserById(id);
     }
 
     @RequestMapping(value = "/usuario", method = RequestMethod.POST)
-    public Usuario createUser(@RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario){
         return usuarioService.createUser(usuario);
     }
 

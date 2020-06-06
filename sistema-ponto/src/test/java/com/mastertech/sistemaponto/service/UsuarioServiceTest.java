@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -49,11 +50,9 @@ public class UsuarioServiceTest {
     public void deveCriarUsuario() {
         when(usuarioRepository.save(usuario)).thenReturn(usuario);
 
-        Usuario usuarioCriado = sujeito.createUser(usuario);
-        assertEquals(usuario.getNomeCompleto(), usuarioCriado.getNomeCompleto());
-        assertEquals(usuario.getCpf(), usuarioCriado.getCpf());
-        assertEquals(usuario.getEmail(), usuarioCriado.getEmail());
-        assertEquals(usuario.getDataCadastro(), usuarioCriado.getDataCadastro());
+        ResponseEntity<Usuario> usuarioCriado = sujeito.createUser(usuario);
+        assertEquals(HttpStatus.CREATED, usuarioCriado.getStatusCode());
+
     }
 
     @Test
@@ -62,8 +61,8 @@ public class UsuarioServiceTest {
         usuario.setId(id);
         when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
 
-        Optional<Usuario> optional = sujeito.getUserById(id);
-        assertEquals(usuario, optional.get());
+        ResponseEntity<Usuario> optional = sujeito.getUserById(id);
+        assertEquals(usuario, optional.getBody());
     }
 
     @Test

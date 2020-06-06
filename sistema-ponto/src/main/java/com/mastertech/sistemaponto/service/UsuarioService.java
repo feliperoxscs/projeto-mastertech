@@ -20,23 +20,24 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Optional<Usuario> getUserById(long id) {
+    public ResponseEntity<Usuario> getUserById(long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         if(usuario.isPresent()){
-            return usuario;
+            return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
         }
         else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    public Usuario createUser(Usuario usuario) {
+    public ResponseEntity<Usuario> createUser(Usuario usuario) {
         Optional<Usuario> userCompare = usuarioRepository.findByCpf(usuario.getCpf());
         if(userCompare.isPresent()){
-            return userCompare.get();
+            return new ResponseEntity<Usuario>(userCompare.get(),HttpStatus.UNPROCESSABLE_ENTITY);
         }
         else {
-            return usuarioRepository.save(usuario);
+            usuarioRepository.save(usuario);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
     }
 
