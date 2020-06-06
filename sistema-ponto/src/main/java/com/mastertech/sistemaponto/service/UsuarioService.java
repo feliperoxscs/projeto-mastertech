@@ -20,13 +20,13 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public ResponseEntity<Usuario> getUserById(long id) {
+    public Optional<Usuario> getUserById(long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         if(usuario.isPresent()){
-            return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
+            return usuario;
         }
         else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return null;
         }
     }
 
@@ -43,12 +43,12 @@ public class UsuarioService {
     public ResponseEntity<Usuario> changeUser(long id, Usuario newUsuario) {
         Optional<Usuario> oldUsuario = usuarioRepository.findById(id);
         if(oldUsuario.isPresent()) {
-            Usuario usuario = oldUsuario.get();
-            usuario.setNomeCompleto(newUsuario.getNomeCompleto());
-            usuario.setEmail(newUsuario.getEmail());
-            usuario.setCpf(newUsuario.getCpf());
-            usuarioRepository.save(usuario);
-            return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
+            Optional<Usuario> usuario = oldUsuario;
+            usuario.get().setNomeCompleto(newUsuario.getNomeCompleto());
+            usuario.get().setEmail(newUsuario.getEmail());
+            usuario.get().setCpf(newUsuario.getCpf());
+            usuarioRepository.save(usuario.get());
+            return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.CREATED);
         }
         else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

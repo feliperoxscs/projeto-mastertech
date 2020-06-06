@@ -29,6 +29,10 @@ public class Usuario {
         return id;
     }
 
+    public void setId(long id){
+        this.id = id;
+    }
+
     public String getNomeCompleto() {
         return nomeCompleto;
     }
